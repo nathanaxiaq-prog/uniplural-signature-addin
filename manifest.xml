@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0" xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides/1.0" xsi:type="MailApp">
+  <Id>d7c2c9bb-254e-4399-b7e0-f2848df027ee</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>Uniplural Group Ltd</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <DisplayName DefaultValue="Uniplural Staff Signatures"/>
+  <Description DefaultValue="Inserts the approved Uniplural Group staff signature (name, job title, office and mobile) for the sending uniplural.com address. Shared, role and Żugraga mailboxes are left unchanged."/>
+  <IconUrl DefaultValue="https://nathanaxiaq-prog.github.io/uniplural-signature-addin/assets/icon-64.png"/>
+  <HighResolutionIconUrl DefaultValue="https://nathanaxiaq-prog.github.io/uniplural-signature-addin/assets/icon-128.png"/>
+  <SupportUrl DefaultValue="https://nathanaxiaq-prog.github.io/uniplural-signature-addin/"/>
+  <AppDomains>
+    <AppDomain>https://nathanaxiaq-prog.github.io</AppDomain>
+  </AppDomains>
+  <Hosts>
+    <Host Name="Mailbox"/>
+  </Hosts>
+  <Requirements>
+    <Sets>
+      <Set Name="Mailbox" MinVersion="1.5"/>
+    </Sets>
+  </Requirements>
+  <FormSettings>
+    <Form xsi:type="ItemRead">
+      <DesktopSettings>
+        <SourceLocation DefaultValue="https://nathanaxiaq-prog.github.io/uniplural-signature-addin/runtime-1.0.0.html"/>
+        <RequestedHeight>32</RequestedHeight>
+      </DesktopSettings>
+    </Form>
+  </FormSettings>
+  <Permissions>ReadWriteItem</Permissions>
+  <Rule xsi:type="RuleCollection" Mode="Or">
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Read"/>
+  </Rule>
+  <DisableEntityHighlighting>false</DisableEntityHighlighting>
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides/1.1" xsi:type="VersionOverridesV1_1">
+      <!-- Mailbox 1.5 floor so Outlook mobile can load it. setSignatureAsync (1.10) and OnMessageFromChanged (1.13) are feature-checked at runtime. -->
+      <Requirements>
+        <bt:Sets DefaultMinVersion="1.5">
+          <bt:Set Name="Mailbox"/>
+        </bt:Sets>
+      </Requirements>
+      <Hosts>
+        <Host xsi:type="MailHost">
+          <Runtimes>
+            <Runtime resid="WebViewRuntime.Url">
+              <Override type="javascript" resid="JSRuntime.Url"/>
+            </Runtime>
+          </Runtimes>
+          <DesktopFormFactor>
+            <FunctionFile resid="Commands.Url"/>
+            <ExtensionPoint xsi:type="LaunchEvent">
+              <LaunchEvents>
+                <LaunchEvent Type="OnNewMessageCompose" FunctionName="onNewMessageComposeHandler"/>
+                <LaunchEvent Type="OnMessageFromChanged" FunctionName="onMessageFromChangedHandler"/>
+              </LaunchEvents>
+              <SourceLocation resid="WebViewRuntime.Url"/>
+            </ExtensionPoint>
+          </DesktopFormFactor>
+          <MobileFormFactor>
+            <ExtensionPoint xsi:type="LaunchEvent">
+              <LaunchEvents>
+                <LaunchEvent Type="OnNewMessageCompose" FunctionName="onNewMessageComposeHandler"/>
+                <LaunchEvent Type="OnMessageFromChanged" FunctionName="onMessageFromChangedHandler"/>
+              </LaunchEvents>
+              <SourceLocation resid="WebViewRuntime.Url"/>
+            </ExtensionPoint>
+          </MobileFormFactor>
+        </Host>
+      </Hosts>
+      <Resources>
+        <bt:Urls>
+          <bt:Url id="Commands.Url" DefaultValue="https://nathanaxiaq-prog.github.io/uniplural-signature-addin/runtime-1.0.0.html"/>
+          <bt:Url id="WebViewRuntime.Url" DefaultValue="https://nathanaxiaq-prog.github.io/uniplural-signature-addin/runtime-1.0.0.html"/>
+          <bt:Url id="JSRuntime.Url" DefaultValue="https://nathanaxiaq-prog.github.io/uniplural-signature-addin/launchevent-1.0.0.js"/>
+        </bt:Urls>
+        <bt:ShortStrings>
+          <bt:String id="GroupLabel" DefaultValue="Uniplural"/>
+        </bt:ShortStrings>
+      </Resources>
+    </VersionOverrides>
+  </VersionOverrides>
+</OfficeApp>
